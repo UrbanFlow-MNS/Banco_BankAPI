@@ -1,0 +1,12 @@
+﻿using System;
+namespace Blanco_BankAPI.Models
+{
+	public class Account
+	{
+        public string AccountNumber { get; set; }
+        public decimal Balance { get; set; }
+        public bool IsOverdraftable { get; set; }
+        public int UserId { get; set; }
+    }
+}
+
