@@ -24,7 +24,14 @@ namespace Blanco_BankAPI.Controllers
         public ActionResult<decimal> GetAccountAmount(int userId)
         {
             decimal amount = _accountService.GetAccountAmountByUserId(userId);
-            return Ok(amount);
+
+
+            return Ok(new
+            {
+                balance = amount
+            });
+
+
         }
     }
 }
