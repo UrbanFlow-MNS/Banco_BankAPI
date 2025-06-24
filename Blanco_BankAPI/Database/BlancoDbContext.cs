@@ -5,8 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blanco_BankAPI.Database
 {
-	public class BlancoDbContext
+	public class BlancoDbContext : DbContext
 	{
+        public BlancoDbContext(DbContextOptions<BlancoDbContext> options)
+        : base(options)
+        {
+        }
+
+        public DbSet<Account> Accounts { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+        }
+
         public List<Account> accounts = new List<Account>
         {
             new Account { AccountNumber = "FR001", Balance = 1500, UserId = 1 },

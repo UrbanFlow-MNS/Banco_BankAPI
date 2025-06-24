@@ -18,6 +18,8 @@ namespace Blanco_BankAPI.Service
             Account? account = _context.accounts.FirstOrDefault(x => x.UserId == userId);
             return account.Balance;
         }
+
+
     }
 }
 

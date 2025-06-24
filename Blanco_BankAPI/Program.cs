@@ -7,18 +7,28 @@ using Blanco_BankAPI.DTO;
 using Blanco_BankAPI.Service;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<BlancoDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Personal services Dependancy Injection
 builder.Services.AddScoped<BlancoDbContext>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
+
+// CONFIG RABBITMQ - MASSTRANSIT
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<BalanceConsumer>();
@@ -33,13 +43,12 @@ builder.Services.AddMassTransit(x =>
             h.Password("password");
         });
 
-        // Configuration globale pour les messages bruts
-        cfg.UseRawJsonSerializer();
+        cfg.UseRawJsonSerializer(); // NE PAS SUPPRIMER
 
         cfg.ReceiveEndpoint("balance_queue", e =>
         {
-            e.ClearSerialization();
-            e.UseRawJsonSerializer();
+            e.ClearSerialization();   // NE PAS SUPPRIMER
+            e.UseRawJsonSerializer(); // NE PAS SUPPRIMER
             e.ConfigureConsumer<BalanceConsumer>(context);
             e.PurgeOnStartup = false;
         });
@@ -47,6 +56,13 @@ builder.Services.AddMassTransit(x =>
 });
 
 var app = builder.Build();
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var context = scope.ServiceProvider.GetRequiredService<BlancoDbContext>();
+
+//    context.Database.Migrate();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -58,9 +74,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
-// Logs pour vérifier que MassTransit démarre
-Console.WriteLine("=== Démarrage de l'application ===");
-Console.WriteLine("MassTransit va démarrer...");
 
 app.Run();
