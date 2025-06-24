@@ -66,39 +66,7 @@ namespace Blanco_BankAPI
 
                     await SendDirectReply(replyTo, correlationId, response);
 
-
-                    await _publishEndpoint.Publish(response, publishContext =>
-                    {
-                        publishContext.SetRoutingKey(replyTo);
-                        publishContext.CorrelationId = Guid.Parse(correlationId);
-                    });
-
-
-
                 }
-
-
-
-                Console.WriteLine("creation dto");
-
-
-                //var endpoint = await context.GetSendEndpoint(new Uri($"queue:{replyTo}"));
-                //await endpoint.Send(response);
-
-                //Console.WriteLine("avant réponse");
-                //Console.WriteLine(context.Message);
-
-
-                //await context.RespondAsync<UserBalanceDTO>(response);
-
-                //await context.Publish<UserBalanceDTO>(new BalanceResponseDTO
-                //{
-                //    Balance = balance,
-                //    UserId = userId
-                //});
-
-                //await context.Publish(response);
-                //Console.WriteLine($"Réponse publiée : {response.Balance}");
 
                 Console.WriteLine("c envoyé");
 
