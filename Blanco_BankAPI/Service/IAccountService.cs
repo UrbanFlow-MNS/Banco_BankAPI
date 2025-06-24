@@ -2,6 +2,6 @@
 {
     public interface IAccountService
     {
-        decimal GetAccountAmountByUserId(int userId);
+        int GetAccountAmountByUserId(int userId);
     }
 }

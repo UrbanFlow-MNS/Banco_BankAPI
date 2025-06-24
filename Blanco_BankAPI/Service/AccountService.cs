@@ -13,7 +13,7 @@ namespace Blanco_BankAPI.Service
             _context = context;
         }
 
-        public decimal GetAccountAmountByUserId(int userId)
+        public int GetAccountAmountByUserId(int userId)
         {
             Account? account = _context.accounts.FirstOrDefault(x => x.UserId == userId);
             return account.Balance;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json;
+
 namespace Blanco_BankAPI
 {
     public class WrappedMessage<T>
@@ -8,4 +10,5 @@ namespace Blanco_BankAPI
         public string Id { get; set; }
     }
 }
+
 
