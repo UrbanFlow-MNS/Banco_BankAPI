@@ -1,4 +1,6 @@
 ﻿using System;
+using MassTransit;
+
 namespace Blanco_BankAPI.DTO
 {
 	public class BalanceResponseDTO

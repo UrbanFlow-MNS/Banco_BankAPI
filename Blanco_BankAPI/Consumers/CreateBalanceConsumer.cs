@@ -29,11 +29,14 @@ namespace Blanco_BankAPI.Consumers
                 {
                     Console.WriteLine("Payload reçu : " + JsonSerializer.Serialize(context.Message.Data));
 
+                    Console.WriteLine("APPEL DU CONSUMER DE CREATION DE BALANCE :");
                     var props = rabbitContext.Properties;
 
                     Console.WriteLine("props: " + props);
                     Console.WriteLine($"ReplyTo: {props.ReplyTo}");
                     Console.WriteLine($"CorrelationId: {props.CorrelationId}");
+
+
 
 
                     string replyTo = props.ReplyTo;

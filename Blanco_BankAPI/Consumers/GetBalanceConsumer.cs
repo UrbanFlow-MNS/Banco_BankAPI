@@ -14,7 +14,7 @@ using RabbitMQ.Client.Events;
 
 namespace Blanco_BankAPI
 {
-    public class GetBalanceConsumer : IConsumer<WrappedMessage<UserBalanceDTO>> 
+    public class GetBalanceConsumer : IConsumer<WrappedMessage<GetUserBalanceDTO>> 
     {
         private readonly IAccountService _accountService;
         private readonly IPublishEndpoint _publishEndpoint;
@@ -25,14 +25,17 @@ namespace Blanco_BankAPI
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<WrappedMessage<UserBalanceDTO>> context)
+        public async Task Consume(ConsumeContext<WrappedMessage<GetUserBalanceDTO>> context)
         {
+            Console.WriteLine(context.Message.Pattern);
+
             try
             {
-
                 if (context.TryGetPayload(out RabbitMqReceiveContext rabbitContext))
                 {
                     var props = rabbitContext.Properties;
+
+                    Console.WriteLine("APPEL DU CONSUMER DE VA CHERCHER BALANCE POUR UTILISATEUR");
 
                     Console.WriteLine("props: " + props);
                     Console.WriteLine($"ReplyTo: {props.ReplyTo}");

@@ -1,7 +1,10 @@
 ﻿using System;
+using MassTransit;
+
 namespace Blanco_BankAPI.DTO
 {
-	public class CreateUserBalanceDTO
+    [MessageUrn("CreateUserBalanceDTO")]
+    public class CreateUserBalanceDTO
 	{
 		public int Id { get; set; }
 		public int Balance { get; set; }
