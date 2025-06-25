@@ -1,11 +1,12 @@
 ﻿using System;
 namespace Blanco_BankAPI.DTO
 {
-	public class CreateBalanceDTO
+	public class CreateUserBalanceDTO
 	{
-		public CreateBalanceDTO()
-		{
-		}
+		public int Id { get; set; }
+		public int Balance { get; set; }
+		public int UserId { get; set; }
+		public string AccNumber { get; set; }
 	}
 }
 

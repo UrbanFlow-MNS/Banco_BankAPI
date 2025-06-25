@@ -21,17 +21,21 @@ namespace Blanco_BankAPI.Controllers
         }
 
         [HttpGet("balance/{userId}")]
-        public ActionResult<decimal> GetAccountAmount(int userId)
+        public ActionResult<int> GetAccountAmount(int userId)
         {
-            decimal amount = _accountService.GetAccountAmountByUserId(userId);
-
+            int amount = _accountService.GetAccountAmountByUserId(userId);
 
             return Ok(new
             {
                 balance = amount
             });
+        }
 
-
+        [HttpPost("balance")]
+        public ActionResult PostAccountAmount(int userId, int amount, string accNumber)
+        {
+            _accountService.CreateAccountBalance(userId, amount, accNumber);
+            return Ok();
         }
     }
 }

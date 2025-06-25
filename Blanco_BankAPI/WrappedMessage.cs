@@ -8,6 +8,7 @@ namespace Blanco_BankAPI
         public string Pattern { get; set; }
         public T Data { get; set; }
         public string Id { get; set; }
+        public string Action { get; set; }
     }
 }
 

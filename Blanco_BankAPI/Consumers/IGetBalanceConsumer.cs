@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Blanco_BankAPI
 {
-    public interface IBalanceConsumer
+    public interface IGetBalanceConsumer
     {
         Task Consume(ConsumeContext<WrappedMessage<UserBalanceDTO>> context);
     }

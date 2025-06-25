@@ -1,22 +1,14 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using Blanco_BankAPI;
+﻿using Blanco_BankAPI;
+using Blanco_BankAPI.Consumers;
 using Blanco_BankAPI.Database;
-using Blanco_BankAPI.DTO;
 using Blanco_BankAPI.Service;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<BlancoDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
-
-
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -27,29 +19,30 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<BlancoDbContext>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
-
 // CONFIG RABBITMQ - MASSTRANSIT
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<BalanceConsumer>();
+    // Ajouter les deux consumers
+    x.AddConsumer<GetBalanceConsumer>();
+    x.AddConsumer<CreateBalanceConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
-
-
         cfg.Host("localhost", "/", h =>
         {
             h.Username("user");
             h.Password("password");
         });
 
-        cfg.UseRawJsonSerializer(); // NE PAS SUPPRIMER
+        cfg.UseRawJsonSerializer();
 
+        // Queue pour get_balance_queue
         cfg.ReceiveEndpoint("balance_queue", e =>
         {
-            e.ClearSerialization();   // NE PAS SUPPRIMER
-            e.UseRawJsonSerializer(); // NE PAS SUPPRIMER
-            e.ConfigureConsumer<BalanceConsumer>(context);
+            e.ClearSerialization();
+            e.UseRawJsonSerializer();
+            e.ConfigureConsumer<GetBalanceConsumer>(context);
+            e.ConfigureConsumer<CreateBalanceConsumer>(context);
             e.PurgeOnStartup = false;
         });
     });
@@ -57,14 +50,6 @@ builder.Services.AddMassTransit(x =>
 
 var app = builder.Build();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var context = scope.ServiceProvider.GetRequiredService<BlancoDbContext>();
-
-//    context.Database.Migrate();
-//}
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -74,5 +59,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
