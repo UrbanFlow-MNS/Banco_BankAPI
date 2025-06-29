@@ -50,6 +50,22 @@ builder.Services.AddMassTransit(x =>
 
 var app = builder.Build();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<BlancoDbContext>();
+
+        context.Database.EnsureCreated();
+
+    }
+    catch (Exception ex)
+    {
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
