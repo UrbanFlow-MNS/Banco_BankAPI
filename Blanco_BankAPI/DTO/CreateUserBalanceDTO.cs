@@ -3,7 +3,6 @@ using MassTransit;
 
 namespace Blanco_BankAPI.DTO
 {
-    [MessageUrn("CreateUserBalanceDTO")]
     public class CreateUserBalanceDTO
 	{
 		public int Id { get; set; }

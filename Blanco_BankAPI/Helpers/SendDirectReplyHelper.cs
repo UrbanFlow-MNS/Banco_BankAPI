@@ -7,6 +7,13 @@ namespace Blanco_BankAPI.Helpers
 {
 	public class SendDirectReplyHelper
 	{
+        /// <summary>
+        /// Helper to send a response to API gateway sender because i can't get reply_to property with MassTransit somehow 
+        /// </summary>
+        /// <param name="replyTo"></param>
+        /// <param name="correlationId"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         public static async Task SendDirectReply(string replyTo, string correlationId, object response)
         {
             var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password" };

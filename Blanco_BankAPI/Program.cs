@@ -22,8 +22,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 // CONFIG RABBITMQ - MASSTRANSIT
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<GetBalanceConsumer>();
-    x.AddConsumer<CreateBalanceConsumer>();
+    x.AddConsumer<BalanceConsumer>();
+    //x.AddConsumer<CreateBalanceConsumer>();
 
     //x.SetRabbitMqReplyToRequestClientFactory(); // a creuser, potentiellement utilsier ça pour obtenir le replyTo et répondre directement sans passer par le Helper
 
@@ -41,8 +41,8 @@ builder.Services.AddMassTransit(x =>
         {
             e.ClearSerialization();
             e.UseRawJsonSerializer();
-            e.ConfigureConsumer<GetBalanceConsumer>(context);
-            e.ConfigureConsumer<CreateBalanceConsumer>(context);
+            e.ConfigureConsumer<BalanceConsumer>(context);
+            //e.ConfigureConsumer<CreateBalanceConsumer>(context);
         });
 
     });
