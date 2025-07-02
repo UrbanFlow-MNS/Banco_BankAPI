@@ -8,4 +8,4 @@ RUN dotnet restore "Blanco_BankAPI/Blanco_BankAPI.csproj"
 
 WORKDIR /app/Blanco_BankAPI
 
-ENTRYPOINT ["dotnet", "run", "--urls", "http://0.0.0.0:80"]z
+ENTRYPOINT ["dotnet", "run", "--urls", "http://0.0.0.0:80"]
