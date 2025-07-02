@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blanco_BankAPI.Migrations
 {
     [DbContext(typeof(BlancoDbContext))]
-    [Migration("20250624130424_InitialCreate")]
+    [Migration("20250702101535_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

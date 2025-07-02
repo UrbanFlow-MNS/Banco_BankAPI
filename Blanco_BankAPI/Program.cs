@@ -1,4 +1,5 @@
-﻿using Blanco_BankAPI;
+﻿using System;
+using Blanco_BankAPI;
 using Blanco_BankAPI.Consumers;
 using Blanco_BankAPI.Database;
 using Blanco_BankAPI.Service;
@@ -7,8 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("ConnectionStrings__DefaultConnection");
+Console.WriteLine($"Using connection string: {connectionString}");
+
 builder.Services.AddDbContext<BlancoDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionString)));
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -29,7 +33,7 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", "/", h =>
+        cfg.Host("rabbitmq", "/", h =>
         {
             h.Username("user");
             h.Password("password");
@@ -50,7 +54,6 @@ builder.Services.AddMassTransit(x =>
 
 var app = builder.Build();
 
-
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -58,11 +61,20 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<BlancoDbContext>();
 
-        context.Database.EnsureCreated();
+        Console.WriteLine("Connecting to database...");
+        await context.Database.CanConnectAsync();
+        Console.WriteLine("Database connection successful!");
 
+        // Appliquer les migrations
+        Console.WriteLine("Applying database migrations...");
+        await context.Database.MigrateAsync();
+        Console.WriteLine("Database migrations applied successfully!");
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"An error occurred while setting up the database: {ex.Message}");
+        Console.WriteLine($"Stack trace: {ex.StackTrace}");
+        throw; 
     }
 }
 
