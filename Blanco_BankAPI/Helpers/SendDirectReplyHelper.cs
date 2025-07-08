@@ -16,7 +16,7 @@ namespace Blanco_BankAPI.Helpers
         /// <returns></returns>
         public static async Task SendDirectReply(string replyTo, string correlationId, object response)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password" };
+            var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "user", Password = "password" };
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
 
