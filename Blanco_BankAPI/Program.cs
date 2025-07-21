@@ -1,4 +1,5 @@
-﻿using Blanco_BankAPI;
+﻿using System.Text.Json;
+using Blanco_BankAPI;
 using Blanco_BankAPI.Consumers;
 using Blanco_BankAPI.Database;
 using Blanco_BankAPI.Service;
@@ -11,7 +12,11 @@ builder.Services.AddDbContext<BlancoDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
