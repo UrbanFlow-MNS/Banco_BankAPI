@@ -48,7 +48,14 @@ namespace Blanco_BankAPI
                             UserId = userId
                         };
 
-                        await SendDirectReplyHelper.SendDirectReply(replyTo, correlationId, response);
+
+                        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            WriteIndented = true
+                        });
+
+                        await SendDirectReplyHelper.SendDirectReply(replyTo, correlationId, json);
                         break;
                     case "CreateUserBalance":
                         Console.WriteLine("CREATE USER BALANCE :");

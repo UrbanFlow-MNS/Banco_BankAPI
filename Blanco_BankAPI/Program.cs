@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using Blanco_BankAPI;
-using Blanco_BankAPI.Consumers;
 using Blanco_BankAPI.Database;
 using Blanco_BankAPI.Service;
 using MassTransit;
@@ -38,6 +37,12 @@ builder.Services.AddMassTransit(x =>
         {
             h.Username("user");
             h.Password("password");
+        });
+
+        cfg.ConfigureJsonSerializerOptions(options =>
+        {
+            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            return options;
         });
 
         cfg.UseRawJsonSerializer();
